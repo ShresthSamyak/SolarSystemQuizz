@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>3D Solar System Quiz</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="styles-3d.css">
+    <!-- Three.js Libraries -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.min.js"></script>
+</head>
+<body>
+    <!-- 3D Solar System Container (positioned behind everything) -->
+    <div id="solar-system-container"></div>
+    
+    <!-- Planet Information Panel -->
+    <div id="planet-info-panel">
+        <h2 id="planet-info-title">Planet Name</h2>
+        <div id="planet-info-facts"></div>
+        <button id="info-back-btn" class="glow-button primary-btn">Return to Solar System</button>
+    </div>
+    
+    <!-- Original Stars Background -->
+    <div class="stars-container">
+        <div class="stars"></div>
+        <div class="stars2"></div>
+        <div class="stars3"></div>
+    </div>
+
+    <div class="app-container">
+        <!-- Landing Page with Interactive Solar System -->
+        <div id="landing-page" class="screen active">
+            <h1 class="glow-text">Solar System Quiz</h1>
+            <p>Test your knowledge of our cosmic neighborhood!</p>
+            
+            <div class="planet-nav">
+                <button class="planet-btn" data-planet="sun">Sun</button>
+                <button class="planet-btn" data-planet="mercury">Mercury</button>
+                <button class="planet-btn" data-planet="venus">Venus</button>
+                <button class="planet-btn" data-planet="earth">Earth</button>
+                <button class="planet-btn" data-planet="mars">Mars</button>
+                <button class="planet-btn" data-planet="jupiter">Jupiter</button>
+                <button class="planet-btn" data-planet="saturn">Saturn</button>
+                <button class="planet-btn" data-planet="uranus">Uranus</button>
+                <button class="planet-btn" data-planet="neptune">Neptune</button>
+            </div>
+            
+            <!-- 3D Solar System positioned between buttons and name input -->
+            <div id="landing-3d-container" style="height: 400px; width: 100%; position: relative; margin: 20px 0; border-radius: 15px; background-color: rgba(10, 15, 35, 0.3); overflow: hidden; z-index: 10;"></div>
+            
+            <div class="user-info">
+                <label for="start-username">Enter your name to start exploring:</label>
+                <input type="text" id="start-username" placeholder="Your Name" required>
+            </div>
+            
+            <p class="instructions">Click on a planet to start quiz about that celestial body!</p>
+            <button id="view-leaderboard" class="glow-button secondary-btn">View Leaderboard</button>
+        </div>
+
+        <!-- Quiz Interface -->
+        <div id="quiz-interface" class="screen">
+            <div class="planet-bg-container">
+                <div class="orbit-bg orbit-bg-1"></div>
+                <div class="orbit-bg orbit-bg-2"></div>
+                <div class="orbit-bg orbit-bg-3"></div>
+                <div class="planet-bg planet-bg-1"></div>
+                <div class="planet-bg planet-bg-2"></div>
+            </div>
+            
+            <div class="quiz-content-box">
+                <div class="quiz-header">
+                    <h3 id="quiz-topic">Planet Quiz</h3>
+                    <div class="question-counter">Question <span id="current-question">1</span>/25</div>
+                    <div class="timer-container">
+                        Time left: <span id="timer">30</span>s
+                    </div>
+                </div>
+                
+                <div class="progress-bar">
+                    <div class="progress-fill"></div>
+                </div>
+                
+                <div id="question-container">
+                    <h2 id="question-text">Question text will appear here</h2>
+                    <div class="options-container">
+                        <button class="option-btn" data-option="A">Option A</button>
+                        <button class="option-btn" data-option="B">Option B</button>
+                        <button class="option-btn" data-option="C">Option C</button>
+                        <button class="option-btn" data-option="D">Option D</button>
+                    </div>
+                </div>
+                
+                <div id="feedback-container" class="hidden">
+                    <p id="feedback-text"></p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Score Summary -->
+        <div id="score-summary" class="screen">
+            <div class="summary-content-box">
+                <h1>Quiz Complete!</h1>
+                <div class="score-container">
+                    <h2>Your Score: <span id="final-score">0</span>/100</h2>
+                    <div class="stats">
+                        <p>Correct answers: <span id="correct-count">0</span>/25</p>
+                        <p>Incorrect answers: <span id="incorrect-count">0</span>/25</p>
+                    </div>
+                </div>
+                <div class="user-info">
+                    <p>Your score will be added to the leaderboard as <span id="display-username"></span></p>
+                    <button id="submit-score" class="glow-button primary-btn">Submit to Leaderboard</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Leaderboard -->
+        <div id="leaderboard" class="screen">
+            <div class="leaderboard-content-box">
+                <h1>Cosmic Leaderboard</h1>
+                <div class="leaderboard-container">
+                    <table id="leaderboard-table">
+                        <thead>
+                            <tr>
+                                <th>Rank</th>
+                                <th>Explorer</th>
+                                <th>Score</th>
+                            </tr>
+                        </thead>
+                        <tbody id="leaderboard-body">
+                            <!-- Leaderboard entries will be added here dynamically -->
+                        </tbody>
+                    </table>
+                </div>
+                <button id="play-again" class="glow-button primary-btn">Return to Solar System</button>
+            </div>
+        </div>
+
+        <!-- Admin Panel (Hidden by default) -->
+        <div id="admin-panel" class="screen">
+            <div class="admin-content-box">
+                <h1>Admin Panel</h1>
+                <div class="admin-controls">
+                    <button id="replace-questions" class="danger-btn glow-button">Replace all previous quiz questions with the new solar system quiz</button>
+                    <div id="confirmation-dialog" class="hidden">
+                        <p>This will erase all old questions. Proceed?</p>
+                        <div class="button-group">
+                            <button id="confirm-replace" class="danger-btn glow-button">Yes, Replace</button>
+                            <button id="cancel-replace" class="secondary-btn glow-button">Cancel</button>
+                        </div>
+                    </div>
+                    <div id="admin-status" class="hidden success-message">
+                        Current quiz: 25 solar system questions
+                    </div>
+                </div>
+                <button id="back-to-landing" class="secondary-btn glow-button">Back to Quiz</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="questions.js"></script>
+    <script src="app.js"></script>
+    <script src="3d-solar-system.js"></script>
+    <script src="landing-solar-system.js"></script>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Connect 3D planet clicks to the existing quiz system
+            document.addEventListener('planet-selected', function(e) {
+                if (e.detail && e.detail.planet) {
+                    // When a planet is clicked in 3D mode, start the original quiz with that planet
+                    document.getElementById('solar-system-container').style.display = 'none';
+                    document.getElementById('planet-info-panel').classList.remove('active');
+                    document.getElementById('landing-page').classList.remove('active');
+                    
+                    // Use the planet name from the event
+                    const planetName = e.detail.planet;
+                    startQuiz(planetName);
+                }
+            });
+            
+            // When the start quiz button is clicked in the original UI
+            document.getElementById('start-button').addEventListener('click', function() {
+                // Hide 3D visualization
+                document.getElementById('solar-system-container').style.display = 'none';
+            });
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,123 @@
+/* 3D Solar System Styles */
+
+/* Container for 3D solar system */
+#solar-system-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+    overflow: hidden;
+    pointer-events: auto;
+}
+
+/* Planet Information Panel */
+#planet-info-panel {
+    position: fixed;
+    right: 30px;
+    top: 50%;
+    transform: translateY(-50%);
+    background-color: rgba(10, 15, 35, 0.85);
+    border-radius: 15px;
+    padding: 25px;
+    width: 300px;
+    box-shadow: 0 0 30px rgba(62, 118, 236, 0.4);
+    border: 1px solid rgba(100, 181, 246, 0.5);
+    backdrop-filter: blur(10px);
+    z-index: 100;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(-50%) translateX(100px);
+    transition: all 0.5s ease;
+}
+
+#planet-info-panel.active {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(-50%) translateX(0);
+}
+
+#planet-info-title {
+    font-size: 2rem;
+    color: #64b5f6;
+    margin-bottom: 20px;
+    text-align: center;
+    text-shadow: 0 0 10px rgba(100, 181, 246, 0.7);
+}
+
+#planet-info-facts {
+    margin-bottom: 25px;
+}
+
+#planet-info-facts p {
+    margin-bottom: 12px;
+    line-height: 1.6;
+    color: #e3f2fd;
+    font-size: 1rem;
+    text-align: left;
+    border-left: 3px solid rgba(100, 181, 246, 0.5);
+    padding-left: 15px;
+}
+
+#info-back-btn {
+    width: 100%;
+    padding: 12px;
+    background-color: rgba(33, 150, 243, 0.7);
+    color: white;
+    border: none;
+    border-radius: 30px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: all 0.3s ease;
+    text-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
+}
+
+#info-back-btn:hover {
+    background-color: rgba(33, 150, 243, 0.9);
+    box-shadow: 0 0 15px rgba(33, 150, 243, 0.7);
+}
+
+
+
+
+
+/* Planet click instruction */
+.planet-instruction {
+    position: fixed;
+    top: 30px;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: rgba(10, 15, 35, 0.8);
+    border-radius: 30px;
+    padding: 15px 30px;
+    box-shadow: 0 0 20px rgba(62, 118, 236, 0.4);
+    border: 1px solid rgba(100, 181, 246, 0.5);
+    color: white;
+    font-size: 1.1rem;
+    z-index: 100;
+    text-align: center;
+    transition: opacity 1s ease;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    #planet-info-panel {
+        right: 50%;
+        top: auto;
+        bottom: 30px;
+        transform: translateX(50%) translateY(0);
+        width: 90%;
+        max-width: 350px;
+    }
+    
+    #planet-info-panel.active {
+        transform: translateX(50%) translateY(0);
+    }
+    
+    .planet-instruction {
+        width: 90%;
+        font-size: 1rem;
+        padding: 12px 20px;
+    }
+}
